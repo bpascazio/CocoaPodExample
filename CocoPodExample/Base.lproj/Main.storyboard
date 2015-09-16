@@ -28,18 +28,27 @@
                                 <state key="normal" title="Reload">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
+                                <connections>
+                                    <action selector="reloadButton:" destination="vXZ-lx-hvc" eventType="touchUpInside" id="g1b-zb-JAY"/>
+                                </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="TIV-FP-r81">
                                 <rect key="frame" x="275" y="525" width="50" height="30"/>
                                 <state key="normal" title="Upload">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
+                                <connections>
+                                    <action selector="uploadButton:" destination="vXZ-lx-hvc" eventType="touchUpInside" id="lxR-D1-jdV"/>
+                                </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="POK-cs-rVO">
                                 <rect key="frame" x="150" y="525" width="77" height="30"/>
                                 <state key="normal" title="Take Photo">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
+                                <connections>
+                                    <action selector="takePhotoButton:" destination="vXZ-lx-hvc" eventType="touchUpInside" id="d7I-IP-eay"/>
+                                </connections>
                             </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
@@ -54,6 +63,9 @@
                             <constraint firstAttribute="centerY" secondItem="fyU-gu-BrT" secondAttribute="centerY" id="tAm-kn-iPO"/>
                         </constraints>
                     </view>
+                    <connections>
+                        <outlet property="imageView" destination="fyU-gu-BrT" id="7H1-hG-Ycg"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="x5A-6p-PRh" sceneMemberID="firstResponder"/>
             </objects>
