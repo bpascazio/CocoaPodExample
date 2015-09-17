@@ -13,6 +13,9 @@ import Parse
 
 class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
 
+    var lastImageData:NSData?
+    
+    @IBOutlet weak var commentView: UITextView!
     @IBOutlet weak var imageView: UIImageView!
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -34,6 +37,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
             if let data_ = data {
                 let image = UIImage(data:data_)
                 self.imageView.image = image
+                self.lastImageData = data_
             }
         }
         
@@ -45,10 +49,27 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     
     }
 
+    @IBAction func refreshButton(sender: AnyObject) {
+        
+        let query = PFQuery( className: "Image" )
+        query.getObjectInBackgroundWithId("Klc5c2oMoJ") {
+            (someData: PFObject?, error: NSError?) -> Void in
+            if error == nil && someData != nil {
+                let data = someData!.objectForKey("data") as! NSData
+                let image = UIImage(data:data)
+                self.imageView.image = image
+            } else {
+                println("error")
+            }
+        }
+        
+    }
+    
+    
     @IBAction func uploadButton(sender: AnyObject) {
         
         let parseObject = PFObject( className: "Comment" )
-        let someData:String! = "someData"
+        let someData:String! = commentView.text
         parseObject.setObject(someData, forKey: "someField")
         parseObject.saveInBackgroundWithBlock { (success: Bool, error: NSError?) -> Void in
             if (success) {
@@ -56,6 +77,20 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
             } else {
                 // There was a problem, check error.description
                 println("error = \(error!.description)")
+            }
+        }
+        
+        if let lastImageData_ = self.lastImageData {
+            let parseObject = PFObject( withoutDataWithClassName: "Image", objectId: "Klc5c2oMoJ" )
+            
+            parseObject.setObject(lastImageData_, forKey: "data")
+            parseObject.saveInBackgroundWithBlock { (success: Bool, error: NSError?) -> Void in
+                if (success) {
+                    println("Object has been saved.")
+                } else {
+                    // There was a problem, check error.description
+                    println("error = \(error!.description)")
+                }
             }
         }
         
@@ -102,6 +137,8 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
                 
                 let editedImage: UIImage? = info[UIImagePickerControllerOriginalImage] as! UIImage?;
                 
+                self.lastImageData = UIImagePNGRepresentation(editedImage)
+
                 self.imageView.image = editedImage
             
             }
