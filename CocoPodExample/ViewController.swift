@@ -8,8 +8,9 @@
 
 import UIKit
 import Alamofire
+import MobileCoreServices
 
-class ViewController: UIViewController {
+class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
 
     @IBOutlet weak var imageView: UIImageView!
     override func viewDidLoad() {
@@ -46,7 +47,57 @@ class ViewController: UIViewController {
     @IBAction func uploadButton(sender: AnyObject) {
     }
     
+    func usePhotoAlbum() {
+        
+        let albumPickerController: UIImagePickerController = UIImagePickerController();
+
+        albumPickerController.delegate = self;
+        
+        albumPickerController.modalPresentationStyle = UIModalPresentationStyle.FullScreen;
+        albumPickerController.modalTransitionStyle = UIModalTransitionStyle.CoverVertical;
+        
+        presentViewController(albumPickerController, animated: true, completion: nil);
+    }
+    
     @IBAction func takePhotoButton(sender: AnyObject) {
+        
+        self.usePhotoAlbum()
+        
+    }
+    
+    //MARK: - UIImagePickerControllerDelegate
+    
+    func imagePickerController(picker: UIImagePickerController,
+        didFinishPickingMediaWithInfo info: [NSObject: AnyObject]){
+            let mediaType: CFString? = info[UIImagePickerControllerMediaType] as! CFString?;
+            if mediaType != nil && mediaType! == kUTTypeImage {
+                let metadata: [NSObject: AnyObject]? =
+                info[UIImagePickerControllerMediaMetadata] as! [NSObject: AnyObject]?;
+                if metadata != nil {
+                    //Exchangeable image file format
+                    let exif: [NSObject: AnyObject]? =
+                    metadata!["{Exif}"] as! [NSObject: AnyObject]?;
+                    if exif != nil {
+                        let width: Int? = exif!["PixelXDimension"] as! Int?;
+                        let height: Int? = exif!["PixelYDimension"] as! Int?;
+                        if width != nil && height != nil {
+                            println("dimensions in pixels = \(width!) × \(height!)");
+                        }
+                    }
+                }
+                
+                let editedImage: UIImage? = info[UIImagePickerControllerOriginalImage] as! UIImage?;
+                
+                self.imageView.image = editedImage
+            
+            }
+            
+            dismissViewControllerAnimated(true, completion: nil);
+    }
+    
+    func imagePickerControllerDidCancel(picker: UIImagePickerController) {
+        println("didCancel");
+        dismissViewControllerAnimated(true, completion: nil);
     }
     
 }
