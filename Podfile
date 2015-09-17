@@ -7,6 +7,8 @@ use_frameworks!
 target 'CocoPodExample' do
 
 pod 'Alamofire', '~> 1.3'
+pod 'Parse'
+
 
 end
 

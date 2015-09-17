@@ -9,6 +9,7 @@
 import UIKit
 import Alamofire
 import MobileCoreServices
+import Parse
 
 class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
 
@@ -45,6 +46,19 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     }
 
     @IBAction func uploadButton(sender: AnyObject) {
+        
+        let parseObject = PFObject( className: "Comment" )
+        let someData:String! = "someData"
+        parseObject.setObject(someData, forKey: "someField")
+        parseObject.saveInBackgroundWithBlock { (success: Bool, error: NSError?) -> Void in
+            if (success) {
+                println("Object has been saved.")
+            } else {
+                // There was a problem, check error.description
+                println("error = \(error!.description)")
+            }
+        }
+        
     }
     
     func usePhotoAlbum() {
